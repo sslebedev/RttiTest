@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.6)
+### Project settings
+set(PROJECT_NAME HelloWorld)
+project(PROJECT_NAME)
+
+### Options
+option(USE_RTTI "With RTTI" ON)
+
+### Compiler settings
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+if (USE_RTTI)
+    message("Uses rtti")
+else()
+    message("Uses no rtti")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+endif()
+
+### Sources
+set(SOURCE_FILES Test/main.cpp)
+
+### Target
+add_executable(HelloWorld ${SOURCE_FILES})
