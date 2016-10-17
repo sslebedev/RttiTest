@@ -4,8 +4,6 @@
 
 #include "rtti_test.h"
 
-int GetCurrentMemory();
-
 template<int i>
 class Bi : public A
 {
@@ -67,6 +65,11 @@ public :
 	{}
 };
 
+int GetCurrentMemory();
+void FillArray(const int iterations, A **pTest);
+void DoSomeCasts(const int iterations, A **pTest);
+void ClearArray(const int iterations, A **pTest);
+
 int main()
 {
 	LARGE_INTEGER frequency,
@@ -80,9 +83,72 @@ int main()
 	QueryPerformanceFrequency(&frequency);
 
 	// Allocation
-	QueryPerformanceCounter(&counterBegin);
-
 	auto pTest = new A *[iterations];
+
+	QueryPerformanceCounter(&counterBegin);
+	FillArray(iterations, pTest);
+	QueryPerformanceCounter(&counterEnd);
+	counterTotalAlloc.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
+
+	// Cast
+	QueryPerformanceCounter(&counterBegin);
+	DoSomeCasts(iterations, pTest);
+	QueryPerformanceCounter(&counterEnd);
+	counterTotalCast.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
+
+	// Space
+	auto space = GetCurrentMemory();
+
+	// Free
+	QueryPerformanceCounter(&counterBegin);
+	ClearArray(iterations, pTest);
+    QueryPerformanceCounter(&counterEnd);
+	counterTotalAlloc.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
+
+	delete[](pTest);
+
+	// Log result
+
+	std::cout << std::endl;
+	std::cout << "Memory: " << space << std::endl;
+	std::cout << "Alloc: " << (double) counterTotalAlloc.QuadPart / frequency.QuadPart << std::endl;
+	std::cout << "Cast: " << (double) counterTotalCast.QuadPart / frequency.QuadPart << std::endl;
+	std::cout << "Free: " << (double) counterTotalFree.QuadPart / frequency.QuadPart << std::endl;
+
+	return 0;
+}
+
+void ClearArray(const int iterations, A **pTest)
+{
+#ifdef MULTY_TYPE
+	for (int i = 0; i < genIterations; ++i) {
+		Generator<mi>::Clear(pTest + mi * i);
+	}
+	if (ri > 0) {
+		Generator<ri>::Clear(pTest + mi * genIterations);
+	}
+#else
+	for (int i = 0; i < iterations; ++i) {
+		delete(pTest[i]);
+	}
+#endif
+
+}
+
+void DoSomeCasts(const int iterations, A **pTest)
+{
+	for (int i = 0; i < iterations; ++i) {
+#if defined(COMPILE_CHECK)
+		DoDynamicDowncast(pTest[i]);
+#else
+		DoCast(pTest[i]);
+		//std::cout<<pTest[i]->foo();
+#endif
+	}
+}
+
+void FillArray(const int iterations, A **pTest)
+{
 #ifdef MULTY_TYPE
 	const int mi = GeneratorMaxIter;
 	const int genIterations = iterations / mi;
@@ -100,54 +166,6 @@ int main()
 	}
 #endif
 
-	QueryPerformanceCounter(&counterEnd);
-	counterTotalAlloc.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
-
-	// Cast
-	QueryPerformanceCounter(&counterBegin);
-
-	for (int i = 0; i < iterations; ++i) {
-#if defined(COMPILE_CHECK)
-		DoDynamicDowncast(pTest[i]);
-#else
-		DoCast(pTest[i]);
-		//std::cout<<pTest[i]->foo();
-#endif
-	}
-
-	QueryPerformanceCounter(&counterEnd);
-	counterTotalCast.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
-
-	// Space
-	auto space = GetCurrentMemory();
-
-	// Free
-	QueryPerformanceCounter(&counterBegin);
-
-#ifdef MULTY_TYPE
-	for (int i = 0; i < genIterations; ++i) {
-		Generator<mi>::Clear(pTest + mi * i);
-	}
-	if (ri > 0) {
-		Generator<ri>::Clear(pTest + mi * genIterations);
-	}
-#else
-	for (int i = 0; i < iterations; ++i) {
-		delete(pTest[i]);
-	}
-#endif
-	delete[](pTest);
-
-	QueryPerformanceCounter(&counterEnd);
-	counterTotalAlloc.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
-
-	std::cout << std::endl;
-	std::cout << "Memory: " << space << std::endl;
-	std::cout << "Alloc: " << (double) counterTotalAlloc.QuadPart / frequency.QuadPart << std::endl;
-	std::cout << "Cast: " << (double) counterTotalCast.QuadPart / frequency.QuadPart << std::endl;
-	std::cout << "Free: " << (double) counterTotalFree.QuadPart / frequency.QuadPart << std::endl;
-
-	return 0;
 }
 
 int GetCurrentMemory()
