@@ -143,7 +143,7 @@ int main()
 
 	std::cout << std::endl;
 	std::cout << "Memory: " << space << std::endl;
-	std::cout << "Alloc: " << counterTotalAlloc.QuadPart / frequency.QuadPart << std::endl;
+	std::cout << "Alloc: " << (double) counterTotalAlloc.QuadPart / frequency.QuadPart << std::endl;
 	std::cout << "Cast: " << (double) counterTotalCast.QuadPart / frequency.QuadPart << std::endl;
 	std::cout << "Free: " << (double) counterTotalFree.QuadPart / frequency.QuadPart << std::endl;
 
