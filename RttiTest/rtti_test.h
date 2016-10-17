@@ -35,7 +35,7 @@ const char *DoDynamicDowncast(A *ptr);
 
 #else
 
-const char *DoCast(A *ptr);
+B * DoCast(A *ptr);
 
 #endif
 

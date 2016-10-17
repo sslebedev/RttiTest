@@ -14,19 +14,19 @@ option(USE_RTTI_LIB "Lib with RTTI" ON)
 
 #add_definitions(-DCOMPILE_CHECK) # compile or performance
 add_definitions(-DPERFORMANCE_DYNAMIC) # for performance dynamyc or static
-add_definitions(-DMULTY_TYPE) # use multiple time generator
+#add_definitions(-DMULTY_TYPE) # use multiple time generator
 
 ## 1 type:
-## Dynamic RTTI:   Alloc ~= 0.163421,  Mem ~= 205070336
-## Static RTTI:    Alloc ~= 0.0257035, Mem ~= 205066240
-## Static no RTTI: Alloc ~= 0.0239274, Mem ~= 205066240
+## Dynamic RTTI:   Alloc ~= 0.1634850, Mem ~= 205107200
+## Static RTTI:    Alloc ~= 0.0135471, Mem ~= 205107200
+## Static no RTTI: Alloc ~= 0.0137099, Mem ~= 205090816
 
-## Many types:
-## Dynamic RTTI:   Alloc ~= 0.298276, Mem ~= 205152256
-## Static RTTI:    Alloc ~= 0.146559, Mem ~= 205201408
-## Static no RTTI: Alloc ~= 0.150289, Mem ~= 205189120
+## 1000 types:
+## Dynamic RTTI:   Alloc ~= 0.2980080, Mem ~= 205193216
+## Static RTTI:    Alloc ~= 0.0177365, Mem ~= 205148160
+## Static no RTTI: Alloc ~= 0.0168343, Mem ~= 205119488
 
-## Targets:
+## Targets (exe / lib):
 ## DYNAMIC with RTTI 63 239 / 2 290
 ## STATIC  with RTTI 63 129 / 1 430
 ## STATIC  no   RTTI 62 364 / 1 430

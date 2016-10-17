@@ -21,14 +21,12 @@ const char *DoUpcast(B *ptr)
 
 #else
 
-const char *DoCast(A *ptr)
+B *DoCast(A *ptr)
 {
 #if defined(PERFORMANCE_DYNAMIC)
-	auto pb = dynamic_cast<B *>(ptr);
-	return pb != nullptr ? pb->foo() : "null"; // Works only with rtti (downcast)
+	return dynamic_cast<B *>(ptr); // Works only with rtti (downcast)
 #else
-	auto pb = static_cast<B *>(ptr);
-	return pb != nullptr ? pb->foo() : "null"; // Works everywhere
+	return static_cast<B *>(ptr); // Works everywhere
 #endif
 }
 
