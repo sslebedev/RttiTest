@@ -12,6 +12,9 @@ class A
 public:
 	virtual const char *foo()
 	{ return "A"; }
+
+	virtual ~A()
+	{}
 };
 
 class B : public A
@@ -19,6 +22,9 @@ class B : public A
 public:
 	virtual const char *foo()
 	{ return "B"; }
+
+	virtual ~B()
+	{}
 };
 
 #if defined(COMPILE_CHECK)
