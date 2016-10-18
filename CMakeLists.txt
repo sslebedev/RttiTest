@@ -17,14 +17,14 @@ add_definitions(-DPERFORMANCE_DYNAMIC) # for performance dynamyc or static
 #add_definitions(-DMULTY_TYPE) # use multiple time generator
 
 ## 1 type:
-## Dynamic RTTI:   Alloc ~= 0.1634850, Mem ~= 205107200
-## Static RTTI:    Alloc ~= 0.0135471, Mem ~= 205107200
-## Static no RTTI: Alloc ~= 0.0137099, Mem ~= 205090816
+## Dynamic RTTI:   Cast ~= 0.1634850, Mem ~= 205107200
+## Static RTTI:    Cast ~= 0.0135471, Mem ~= 205107200
+## Static no RTTI: Cast ~= 0.0137099, Mem ~= 205090816
 
 ## 1000 types:
-## Dynamic RTTI:   Alloc ~= 0.2980080, Mem ~= 205193216
-## Static RTTI:    Alloc ~= 0.0177365, Mem ~= 205148160
-## Static no RTTI: Alloc ~= 0.0168343, Mem ~= 205119488
+## Dynamic RTTI:   Cast ~= 0.2980080, Mem ~= 205193216
+## Static RTTI:    Cast ~= 0.0177365, Mem ~= 205148160
+## Static no RTTI: Cast ~= 0.0168343, Mem ~= 205119488
 
 ## Targets (exe / lib):
 ## DYNAMIC with RTTI 63 239 / 2 290
