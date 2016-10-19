@@ -14,7 +14,7 @@ option(USE_RTTI_LIB "Lib with RTTI" ON)
 
 #add_definitions(-DCOMPILE_CHECK) # compile or performance
 add_definitions(-DPERFORMANCE_DYNAMIC) # for performance dynamyc or static
-#add_definitions(-DMULTY_TYPE) # use multiple time generator
+add_definitions(-DMULTY_TYPE) # use multiple time generator
 
 ## 1 type:
 ## Dynamic RTTI:   Alloc ~= 0.1634850, Mem ~= 205107200

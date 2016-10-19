@@ -1,3 +1,4 @@
+#include <typeinfo>
 #include "rtti_test.h"
 
 #if defined(COMPILE_CHECK)

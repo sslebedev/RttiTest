@@ -66,9 +66,12 @@ public :
 };
 
 int GetCurrentMemory();
-void FillArray(const int iterations, A **pTest);
-void DoSomeCasts(const int iterations, A **pTest);
-void ClearArray(const int iterations, A **pTest);
+template <int iterations>
+void FillArray(A **pTest);
+template <int iterations>
+void DoSomeCasts(A **pTest);
+template <int iterations>
+void ClearArray(A **pTest);
 
 int main()
 {
@@ -86,13 +89,13 @@ int main()
 	auto pTest = new A *[iterations];
 
 	QueryPerformanceCounter(&counterBegin);
-	FillArray(iterations, pTest);
+	FillArray<iterations>(pTest);
 	QueryPerformanceCounter(&counterEnd);
 	counterTotalAlloc.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
 
 	// Cast
 	QueryPerformanceCounter(&counterBegin);
-	DoSomeCasts(iterations, pTest);
+	DoSomeCasts<iterations>(pTest);
 	QueryPerformanceCounter(&counterEnd);
 	counterTotalCast.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
 
@@ -101,7 +104,7 @@ int main()
 
 	// Free
 	QueryPerformanceCounter(&counterBegin);
-	ClearArray(iterations, pTest);
+	ClearArray<iterations>(pTest);
     QueryPerformanceCounter(&counterEnd);
 	counterTotalAlloc.QuadPart = counterEnd.QuadPart - counterBegin.QuadPart;
 
@@ -118,9 +121,14 @@ int main()
 	return 0;
 }
 
-void ClearArray(const int iterations, A **pTest)
+template <int iterations>
+void ClearArray(A **pTest)
 {
 #ifdef MULTY_TYPE
+	const int mi = GeneratorMaxIter;
+	const int genIterations = iterations / mi;
+	constexpr int ri = iterations % mi;
+
 	for (int i = 0; i < genIterations; ++i) {
 		Generator<mi>::Clear(pTest + mi * i);
 	}
@@ -135,7 +143,8 @@ void ClearArray(const int iterations, A **pTest)
 
 }
 
-void DoSomeCasts(const int iterations, A **pTest)
+template <int iterations>
+void DoSomeCasts(A **pTest)
 {
 	for (int i = 0; i < iterations; ++i) {
 #if defined(COMPILE_CHECK)
@@ -147,7 +156,8 @@ void DoSomeCasts(const int iterations, A **pTest)
 	}
 }
 
-void FillArray(const int iterations, A **pTest)
+template <int iterations>
+void FillArray(A **pTest)
 {
 #ifdef MULTY_TYPE
 	const int mi = GeneratorMaxIter;
